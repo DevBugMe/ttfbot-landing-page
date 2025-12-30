@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TTF+Funda Telegram Signal Copier - MetaTrader 5 Automated Trading</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2332CD32;stop-opacity:1' /><stop offset='100%' style='stop-color:%2300BFFF;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' fill='%230B1523' rx='15'/><circle cx='50' cy='35' r='8' fill='url(%23grad)'/><path d='M35 50 L50 60 L65 50' stroke='url(%23grad)' stroke-width='3' fill='none' stroke-linecap='round'/><path d='M35 65 L65 65' stroke='url(%23grad)' stroke-width='3' stroke-linecap='round'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Facebook Messenger Plugin -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -68,7 +71,6 @@
         .pricing-card {
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .pricing-card:hover {
@@ -181,9 +183,262 @@
                 font-size: 1.75rem;
             }
         }
+
+        /* Trial Popup Modal */
+        .trial-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInModal 0.3s ease;
+        }
+
+        .trial-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeInModal {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .trial-modal-content {
+            background: linear-gradient(135deg, rgba(30, 40, 55, 0.95) 0%, rgba(11, 21, 35, 0.95) 100%);
+            border: 2px solid #32CD32;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(50, 205, 50, 0.3), 0 0 40px rgba(0, 191, 255, 0.2);
+            position: relative;
+            animation: slideInModal 0.4s ease;
+        }
+
+        @keyframes slideInModal {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .trial-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #E8EAED;
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .trial-close-btn:hover {
+            color: #32CD32;
+        }
+
+        .trial-icon {
+            font-size: 56px;
+            margin-bottom: 15px;
+            animation: bounceIcon 2s ease infinite;
+        }
+
+        @keyframes bounceIcon {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .trial-modal h2 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #32CD32 0%, #00BFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .trial-modal-subtitle {
+            color: #00BFFF;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .trial-modal-text {
+            color: #B0B0B0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .trial-benefits {
+            background: rgba(50, 205, 50, 0.05);
+            border: 1px solid rgba(50, 205, 50, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .trial-benefits li {
+            color: #E8EAED;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .trial-benefits li span {
+            color: #32CD32;
+            margin-right: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .trial-modal-buttons {
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .trial-btn-primary {
+            background-color: #32CD32;
+            color: #000;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .trial-btn-primary:hover {
+            background-color: #28b024;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(50, 205, 50, 0.4);
+        }
+
+        .trial-btn-secondary {
+            background: transparent;
+            color: #00BFFF;
+            padding: 10px 28px;
+            border: 1px solid #00BFFF;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .trial-btn-secondary:hover {
+            background: rgba(0, 191, 255, 0.1);
+            border-color: #32CD32;
+            color: #32CD32;
+        }
+
     </style>
 </head>
 <body class="overflow-x-hidden">
+    <!-- Free Trial Popup Modal -->
+    <div class="trial-modal active" id="trialModal">
+        <div class="trial-modal-content">
+            <button class="trial-close-btn" onclick="closeTrialModal()">×</button>
+            <div class="trial-icon">🎁</div>
+            <h2>3 Days Free Trial</h2>
+            <p class="trial-modal-subtitle">🚀 Start Copying Signals Today!</p>
+            <p class="trial-modal-text">
+                Test drive TTF+Funda Signal Copier completely free for 3 days. No credit card required. Cancel anytime.
+            </p>
+            <ul class="trial-benefits">
+                <li><span>✓</span> Full access to all features</li>
+                <li><span>✓</span> Copy unlimited signals</li>
+                <li><span>✓</span> 24/7 support included</li>
+                <li><span>✓</span> All trading pairs supported</li>
+            </ul>
+            <div class="trial-modal-buttons">
+                <a href="form.html" class="trial-btn-primary text-center block">Claim Free Trial</a>
+                <button class="trial-btn-secondary" onclick="closeTrialModal()">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Facebook Messenger Plugin -->
+    <div id="fb-root"></div>
+    <div id="fb-customer-chat" class="fb-customerchat" page_id="312526039375711" theme_color="#32CD32"></div>
+
+    <!-- Custom Messenger Bubble -->
+    <style>
+        .messenger-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #32CD32 0%, #00BFFF 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(50, 205, 50, 0.4);
+            transition: all 0.3s ease;
+            z-index: 999;
+            border: none;
+            text-decoration: none;
+        }
+
+        .messenger-bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(50, 205, 50, 0.6);
+        }
+
+        .messenger-bubble:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 640px) {
+            .messenger-bubble {
+                width: 55px;
+                height: 55px;
+                font-size: 24px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+
+    <!-- Messenger Bubble Button -->
+    <a href="https://m.me/312526039375711" target="_blank" class="messenger-bubble" title="Chat with us on Messenger">
+        💬
+    </a>
+
     <!-- Navigation -->
     <nav class="sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -220,7 +475,7 @@
                         Copy trading signals directly from Telegram with millisecond precision. Your MT5 account remains secure with our advanced license validation system.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#pricing" class="btn-lime px-8 py-4 rounded-lg text-lg font-bold text-center">Get Started Now</a>
+                        <a href="form.html" class="btn-lime px-8 py-4 rounded-lg text-lg font-bold text-center">Get Started Now</a>
                         <button class="px-8 py-4 rounded-lg border border-gray-500 text-white font-semibold hover:border-white transition" onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})">
                             Learn More
                         </button>
@@ -415,13 +670,13 @@
                 <div class="pricing-card glass p-8 lg:p-10 border border-gray-600">
                     <h3 class="text-2xl sm:text-3xl font-bold mb-2">Monthly Pass</h3>
                     <div class="mb-6">
-                        <span class="text-5xl font-bold">$30</span>
+                        <span class="text-5xl font-bold">$19</span>
                         <span class="text-gray-400 ml-2">/month</span>
                     </div>
                     <p class="text-gray-400 mb-8">Perfect for traders who want flexibility and low commitment</p>
-                    <a href="#contact" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
+                    <button onclick="openMessenger()" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
                         Choose Monthly
-                    </a>
+                    </button>
                     <div class="space-y-4">
                         <div class="flex items-start">
                             <span class="text-lime-400 mr-3 mt-1">✓</span>
@@ -433,7 +688,7 @@
                         <div class="flex items-start">
                             <span class="text-lime-400 mr-3 mt-1">✓</span>
                             <div>
-                                <p class="font-semibold">3 Account Lock</p>
+                                <p class="font-semibold">3 Account License</p>
                                 <p class="text-gray-400 text-sm">Secure your MT5 accounts</p>
                             </div>
                         </div>
@@ -465,9 +720,9 @@
                         <span class="text-gray-400 ml-2">one-time</span>
                     </div>
                     <p class="text-gray-400 mb-8">Best value for serious traders - perfect for small community</p>
-                    <a href="#contact" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
+                    <button onclick="openMessenger()" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
                         Get Lifetime Access
-                    </a>
+                    </button>
                     <div class="space-y-4">
                         <div class="flex items-start">
                             <span class="text-lime-400 mr-3 mt-1">✓</span>
@@ -479,7 +734,7 @@
                         <div class="flex items-start">
                             <span class="text-lime-400 mr-3 mt-1">✓</span>
                             <div>
-                                <p class="font-semibold">10 Account Lock</p>
+                                <p class="font-semibold">10 Account License</p>
                                 <p class="text-gray-400 text-sm">Secure your MT5 account</p>
                             </div>
                         </div>
@@ -509,15 +764,15 @@
 
                 <!-- Reseller/Coach Plan -->
                 <div class="pricing-card glass p-8 lg:p-10 border border-gray-600">
-                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">White Label Plan</h3>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">Dedicated Server</h3>
                     <div class="mb-6">
-                        <span class="text-5xl font-bold">$1499</span>
+                        <span class="text-5xl font-bold">$499</span>
                         <span class="text-gray-400 ml-2">one-time</span>
                     </div>
-                    <p class="text-gray-400 mb-8">Perfect for coaches - help your students copy signals</p>
-                    <a href="#contact" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
-                        Get Reseller Access
-                    </a>
+                    <p class="text-gray-400 mb-8">Perfect for community/coaches - help your students copy signals</p>
+                    <button onclick="openMessenger()" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
+                        Own Server Access
+                    </button>
                     <div class="space-y-4">
                         <div class="flex items-start">
                             <span class="text-lime-400 mr-3 mt-1">✓</span>
@@ -529,7 +784,7 @@
                         <div class="flex items-start">
                             <span class="text-lime-400 mr-3 mt-1">✓</span>
                             <div>
-                                <p class="font-semibold">Unlimited Account Locks</p>
+                                <p class="font-semibold">Unlimited Account License</p>
                                 <p class="text-gray-400 text-sm">Support all your students</p>
                             </div>
                         </div>
@@ -567,6 +822,39 @@
             <p class="text-center text-gray-400 mt-12">
                 All plans include a 7-day money-back guarantee. No questions asked.
             </p>
+
+            <!-- Payment Methods -->
+            <div class="mt-16 pt-12 border-t border-gray-700">
+                <p class="text-center text-gray-400 mb-8 text-sm">Secure Payment Methods</p>
+                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                    <!-- PayPal -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">🅿️</div>
+                        <p class="text-xs text-gray-400">PayPal</p>
+                    </div>
+                    <!-- Wise -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">💳</div>
+                        <p class="text-xs text-gray-400">Wise</p>
+                    </div>
+                    <!-- Credit Card -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">💰</div>
+                        <p class="text-xs text-gray-400">Credit Card</p>
+                    </div>
+                    <!-- Visa Secure -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">🔒</div>
+                        <p class="text-xs text-gray-400">Visa Secure</p>
+                    </div>
+                    <!-- Bank Transfer -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">🏦</div>
+                        <p class="text-xs text-gray-400">Bank Transfer</p>
+                    </div>
+                </div>
+                <p class="text-center text-gray-500 text-xs mt-8">SSL Encrypted • 256-bit Security • PCI Compliant</p>
+            </div>
         </div>
     </section>
 
@@ -704,7 +992,7 @@
             <p class="text-xl text-gray-300 mb-8">
                 Join hundreds of traders who are using TTF+Funda Telegram Signal Copier to copy trades automatically on MetaTrader 5.
             </p>
-            <a href="#pricing" class="btn-lime px-8 py-4 rounded-lg text-lg font-bold inline-block">
+            <a href="form.html" class="btn-lime px-8 py-4 rounded-lg text-lg font-bold inline-block">
                 Get Started Now
             </a>
         </div>
@@ -741,9 +1029,10 @@
                 <div>
                     <h3 class="text-white font-bold mb-4">Connect</h3>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">Twitter</a></li>
-                        <li><a href="#" class="hover:text-white transition">Telegram Community</a></li>
-                        <li><a href="#" class="hover:text-white transition">Discord</a></li>
+                        <li><a href="https://x.com/TTF_Funda" target="_blank" class="hover:text-white transition">X (Twitter)</a></li>
+                        <li><a href="https://www.facebook.com/ttf.funda/" target="_blank" class="hover:text-white transition">Facebook</a></li>
+                        <!--<li><a href="#" class="hover:text-white transition">Telegram Community</a></li>-->
+                        <li><a href="https://discord.gg/kMUqsQza" target="_blank" class="hover:text-white transition">Discord</a></li>
                     </ul>
                 </div>
             </div>
@@ -812,6 +1101,67 @@
         document.querySelectorAll('section').forEach(section => {
             observer.observe(section);
         });
+
+        // Trial Modal Functions
+        function closeTrialModal() {
+            const modal = document.getElementById('trialModal');
+            modal.classList.remove('active');
+            // Store in localStorage so it doesn't show again for 7 days
+            localStorage.setItem('trialModalClosed', new Date().getTime());
+        }
+
+        function startTrial() {
+            // Scroll to pricing section
+            const pricingSection = document.getElementById('pricing');
+            pricingSection.scrollIntoView({ behavior: 'smooth' });
+            closeTrialModal();
+        }
+
+        // Show modal on page load (unless closed recently)
+        window.addEventListener('load', function() {
+            const trialClosed = localStorage.getItem('trialModalClosed');
+            if (trialClosed) {
+                const daysSinceClosed = (new Date().getTime() - parseInt(trialClosed)) / (1000 * 60 * 60 * 24);
+                if (daysSinceClosed < 7) {
+                    // Don't show for 7 days
+                    const modal = document.getElementById('trialModal');
+                    modal.classList.remove('active');
+                    return;
+                }
+            }
+            // Show the modal
+            const modal = document.getElementById('trialModal');
+            modal.classList.add('active');
+        });
+
+        // Close modal when clicking outside the content
+        document.getElementById('trialModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTrialModal();
+            }
+        });
+
+        // Initialize Facebook SDK
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '312526039375711',
+                xfbml: true,
+                version: 'v18.0'
+            });
+        };
+
+        // Open Facebook Messenger
+        function openMessenger() {
+            if (window.FB && window.FB.AppEvents) {
+                FB.AppEvents.logPageView();
+            }
+            if (window.FB && window.FB.CustomerChat) {
+                FB.CustomerChat.show();
+            } else {
+                // Fallback: Open messenger directly
+                window.open('https://m.me/312526039375711', '_blank');
+            }
+        }
     </script>
 </body>
 </html>

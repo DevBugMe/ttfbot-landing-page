@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - TTF+Funda Telegram Signal Copier</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2332CD32;stop-opacity:1' /><stop offset='100%' style='stop-color:%2300BFFF;stop-opacity:1' /></linearGradient></defs><rect width='100' height='100' fill='%230B1523' rx='15'/><circle cx='50' cy='35' r='8' fill='url(%23grad)'/><path d='M35 50 L50 60 L65 50' stroke='url(%23grad)' stroke-width='3' fill='none' stroke-linecap='round'/><path d='M35 65 L65 65' stroke='url(%23grad)' stroke-width='3' stroke-linecap='round'/></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, .headline {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0B1523 0%, #1E2837 100%);
+            color: #E8EAED;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .btn-lime {
+            background-color: #32CD32;
+            color: #000;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-lime:hover {
+            background-color: #28b024;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(50, 205, 50, 0.3);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #32CD32 0%, #00BFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav {
+            backdrop-filter: blur(10px);
+            background: rgba(11, 21, 35, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-card {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(50, 205, 50, 0.2);
+            border-color: #32CD32;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #32CD32;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pricing-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .accent-blue {
+            color: #00BFFF;
+        }
+    </style>
+    <!-- PayPal SDK -->
+    <script 
+      src="https://www.paypal.com/sdk/js?client-id=BAAwhDfVFuaF112AgMRhxG7IkXUw6lpjEOeg6wkIgSeMsGn3AKkRQnnfV_UN8EROxW91Rbt2xlJslH0eFM&components=hosted-buttons&disable-funding=venmo&currency=USD">
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-lime-400 to-blue-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">📊</span>
+                    </div>
+                    <span class="text-xl font-bold text-white hidden sm:inline">TTF+Funda Signal Copier</span>
+                </div>
+                <a href="index.html" class="text-gray-300 hover:text-white transition font-semibold">← Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Pricing Section -->
+    <section class="py-20 sm:py-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl sm:text-5xl font-bold mb-6">
+                    Simple, Transparent <span class="gradient-text">Pricing</span>
+                </h1>
+                <p class="text-xl text-gray-400">Choose the plan that fits your copying strategy</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Monthly Pass -->
+                <div class="pricing-card glass p-8 lg:p-10 border border-gray-600">
+                    <h3 class="text-2xl sm:text-2xl font-bold mb-2">Monthly Pass</h3>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold">$19</span>
+                        <span class="text-gray-400 ml-2">/month</span>
+                    </div>
+                    <p class="text-gray-400 mb-8">Perfect for traders who want flexibility and low commitment</p>
+                    
+                    <!-- PayPal Button -->
+                    <div id="paypal-container-KHCQHC3NRMMAA" class="mb-8"></div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Full Access</p>
+                                <p class="text-gray-400 text-sm">Complete EA functionality</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">3 Account Lock</p>
+                                <p class="text-gray-400 text-sm">Secure your MT5 accounts</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">24/7 Support</p>
+                                <p class="text-gray-400 text-sm">Email & Discord support</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">All Pairs Trading</p>
+                                <p class="text-gray-400 text-sm">Forex & Gold supported</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lifetime Access -->
+                <div class="pricing-card featured glass p-8 lg:p-10 border-2 border-lime-400">
+                    <div class="absolute top-0 right-6 transform -translate-y-1/2">
+                        <span class="bg-lime-400 text-black px-4 py-1 rounded-full text-sm font-bold">Most Popular</span>
+                    </div>
+                    <h3 class="text-2xl sm:text-2xl font-bold mb-2 mt-4">Lifetime Access</h3>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold">$199</span>
+                        <span class="text-gray-400 ml-2">one-time</span>
+                    </div>
+                    <p class="text-gray-400 mb-8">Best value for serious traders - perfect for small community</p>
+                    
+                    <!-- PayPal Button -->
+                    <div id="paypal-container-97MDZ55JL53TS" class="mb-8"></div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Unlimited Updates</p>
+                                <p class="text-gray-400 text-sm">Forever free updates</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">10 Account Lock</p>
+                                <p class="text-gray-400 text-sm">Secure your MT5 account</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Premium VIP Group Access</p>
+                                <p class="text-gray-400 text-sm">Exclusive trading community</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Priority 24/7 Support</p>
+                                <p class="text-gray-400 text-sm">Dedicated support channel</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">All Pairs Trading</p>
+                                <p class="text-gray-400 text-sm">Forex & Gold supported</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dedicated Server -->
+                <div class="pricing-card glass p-8 lg:p-10 border border-gray-600">
+                    <h3 class="text-2xl sm:text-2xl font-bold mb-2">Dedicated Server</h3>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold">$499</span>
+                        <span class="text-gray-400 ml-2">one-time</span>
+                    </div>
+                    <p class="text-gray-400 mb-8">Perfect for community/coaches - help your students copy signals</p>
+                    
+                    <!-- PayPal Button -->
+                    <div id="paypal-container-PW6QLTXPC4U8N" class="mb-8"></div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Unlimited Updates</p>
+                                <p class="text-gray-400 text-sm">Forever free updates</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Unlimited Account Locks</p>
+                                <p class="text-gray-400 text-sm">Support all your students</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Server Setup Assistance</p>
+                                <p class="text-gray-400 text-sm">Complete server configuration help</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Custom Branding</p>
+                                <p class="text-gray-400 text-sm">Brand the platform with your name</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Priority 24/7 Support</p>
+                                <p class="text-gray-400 text-sm">Dedicated support channel</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">All Pairs Trading</p>
+                                <p class="text-gray-400 text-sm">Forex & Gold supported</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Marketing Materials</p>
+                                <p class="text-gray-400 text-sm">Promotional assets for your students</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-center text-gray-400 mt-12">
+                All plans include a 7-day money-back guarantee. No questions asked.
+            </p>
+
+            <!-- Payment Methods -->
+            <div class="mt-16 pt-12 border-t border-gray-700">
+                <p class="text-center text-gray-400 mb-8 text-sm">Secure Payment Methods</p>
+                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                    <!-- PayPal -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">🅿️</div>
+                        <p class="text-xs text-gray-400">PayPal</p>
+                    </div>
+                    <!-- Wise -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">💳</div>
+                        <p class="text-xs text-gray-400">Wise</p>
+                    </div>
+                    <!-- Credit Card -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">💰</div>
+                        <p class="text-xs text-gray-400">Credit Card</p>
+                    </div>
+                    <!-- Visa Secure -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">🔒</div>
+                        <p class="text-xs text-gray-400">Visa Secure</p>
+                    </div>
+                    <!-- Bank Transfer -->
+                    <div class="flex flex-col items-center">
+                        <div class="text-4xl mb-2">🏦</div>
+                        <p class="text-xs text-gray-400">Bank Transfer</p>
+                    </div>
+                </div>
+                <p class="text-center text-gray-500 text-xs mt-8">SSL Encrypted • 256-bit Security • PCI Compliant</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400">
+                    © 2025 TTF+Funda Telegram Signal Copier. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        paypal.HostedButtons({
+            hostedButtonId: "KHCQHC3NRMMAA",
+        }).render("#paypal-container-KHCQHC3NRMMAA")
+
+        paypal.HostedButtons({
+            hostedButtonId: "97MDZ55JL53TS",
+        }).render("#paypal-container-97MDZ55JL53TS")
+
+        paypal.HostedButtons({
+            hostedButtonId: "PW6QLTXPC4U8N",
+        }).render("#paypal-container-PW6QLTXPC4U8N")
+    </script>
+</body>
+</html>
