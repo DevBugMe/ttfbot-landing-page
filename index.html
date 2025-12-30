@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTF+Funda Telegram Signal Copier - MetaTrader 5 Automated Trading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, .headline {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Custom color variables */
+        :root {
+            --navy: #0B1523;
+            --slate: #1E2837;
+            --lime: #32CD32;
+            --electric-blue: #00BFFF;
+            --light-gray: #E8EAED;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0B1523 0%, #1E2837 100%);
+            color: #E8EAED;
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        /* Lime green button */
+        .btn-lime {
+            background-color: #32CD32;
+            color: #000;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-lime:hover {
+            background-color: #28b024;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(50, 205, 50, 0.3);
+        }
+
+        /* Electric blue accent */
+        .accent-blue {
+            color: #00BFFF;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #32CD32 0%, #00BFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Pricing card hover animation */
+        .pricing-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(50, 205, 50, 0.2);
+            border-color: #32CD32;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #32CD32;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Step cards animation */
+        .step-card {
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            border-color: #00BFFF;
+        }
+
+        /* FAQ accordion animation */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer.open {
+            max-height: 500px;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Feature icons */
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: rgba(50, 205, 50, 0.1);
+            border: 2px solid #32CD32;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        /* Navigation */
+        nav {
+            backdrop-filter: blur(10px);
+            background: rgba(11, 21, 35, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero gradient background */
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(50, 205, 50, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(50, 205, 50, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 191, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* Responsive text sizes */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-lime-400 to-blue-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">📊</span>
+                    </div>
+                    <span class="text-xl font-bold text-white hidden sm:inline">TTF+Funda Signal Copier</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#how-it-works" class="text-gray-300 hover:text-white transition">How It Works</a>
+                    <a href="#features" class="text-gray-300 hover:text-white transition">Features</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-white transition">Pricing</a>
+                    <a href="#faq" class="text-gray-300 hover:text-white transition">FAQ</a>
+                </div>
+                <a href="#pricing" class="btn-lime px-6 py-2 rounded-lg text-sm font-semibold">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg py-20 sm:py-32 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                        Copy Telegram Signals <span class="gradient-text">Automatically</span> on MT5
+                    </h1>
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                        <span class="accent-blue">Zero Latency.</span> <span class="accent-blue">24/7 Execution.</span> <span class="accent-blue">Secure Account Locking.</span>
+                    </p>
+                    <p class="text-gray-400 mb-10 text-lg">
+                        Copy trading signals directly from Telegram with millisecond precision. Your MT5 account remains secure with our advanced license validation system.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#pricing" class="btn-lime px-8 py-4 rounded-lg text-lg font-bold text-center">Get Started Now</a>
+                        <button class="px-8 py-4 rounded-lg border border-gray-500 text-white font-semibold hover:border-white transition" onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="hidden lg:flex justify-center">
+                    <div class="glass p-8 w-full max-w-sm">
+                        <div class="space-y-4">
+                            <div class="h-32 bg-gradient-to-br from-lime-400/20 to-blue-400/20 rounded-lg flex items-center justify-center">
+                                <span class="text-6xl">📱</span>
+                            </div>
+                            <div class="h-8 bg-gray-700 rounded-lg"></div>
+                            <div class="h-8 bg-gray-700 rounded-lg w-2/3"></div>
+                            <div class="space-y-2 pt-4">
+                                <div class="h-3 bg-gray-700 rounded-full w-full"></div>
+                                <div class="h-3 bg-gray-700 rounded-full w-5/6"></div>
+                                <div class="h-3 bg-gray-700 rounded-full w-4/5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 sm:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-6">How It Works</h2>
+                <p class="text-xl text-gray-400">Three simple steps to start copying trades automatically</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="step-card glass p-8">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-lime-400/20 rounded-full border-2 border-lime-400">
+                        <span class="text-3xl font-bold text-lime-400">1</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center mb-4">Connect Bot</h3>
+                    <p class="text-gray-300 text-center mb-6">
+                        Link your Telegram account to the TTF+Funda Signal Copier bot. Setup takes less than 2 minutes.
+                    </p>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="flex items-start">
+                            <span class="text-lime-400 mr-3">✓</span>
+                            <span>Telegram API integration</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-lime-400 mr-3">✓</span>
+                            <span>Secure authentication</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card glass p-8">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-blue-400/20 rounded-full border-2 border-blue-400">
+                        <span class="text-3xl font-bold text-blue-400">2</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center mb-4">Link MT5 Account</h3>
+                    <p class="text-gray-300 text-center mb-6">
+                        Connect your MetaTrader 5 account with one-click license validation and secure account locking.
+                    </p>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="flex items-start">
+                            <span class="text-lime-400 mr-3">✓</span>
+                            <span>License validation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-lime-400 mr-3">✓</span>
+                            <span>Account security lock</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card glass p-8">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-green-400/20 rounded-full border-2 border-green-400">
+                        <span class="text-3xl font-bold text-green-400">3</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center mb-4">Start Trading</h3>
+                    <p class="text-gray-300 text-center mb-6">
+                        Receive signals from Telegram and watch as they copy automatically on MT5 with zero latency.
+                    </p>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="flex items-start">
+                            <span class="text-lime-400 mr-3">✓</span>
+                            <span>Instant execution</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-lime-400 mr-3">✓</span>
+                            <span>24/7 monitoring</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 sm:py-32 bg-gradient-to-b from-transparent via-blue-400/5 to-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-6">Powerful Features</h2>
+                <p class="text-xl text-gray-400">Everything you need for successful signal copying</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">🔒</div>
+                    <h3 class="text-xl font-bold mb-3">Remote License Validation</h3>
+                    <p class="text-gray-400">
+                        Secure validation system ensures your license is verified and account is protected.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">💱</div>
+                    <h3 class="text-xl font-bold mb-3">All Pairs & Gold</h3>
+                    <p class="text-gray-400">
+                        Trade any forex pair or gold with the same reliable execution and lightning-fast speeds.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">⚡</div>
+                    <h3 class="text-xl font-bold mb-3">Instant Execution</h3>
+                    <p class="text-gray-400">
+                        Millisecond execution latency ensures your signal copies enter at the best possible price.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">📊</div>
+                    <h3 class="text-xl font-bold mb-3">Smart Dashboard</h3>
+                    <p class="text-gray-400">
+                        Real-time monitoring and analytics dashboard for all your trading activity.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">🔔</div>
+                    <h3 class="text-xl font-bold mb-3">Real-Time Notifications</h3>
+                    <p class="text-gray-400">
+                        Get instant alerts for every signal copied with detailed confirmation details.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">🌐</div>
+                    <h3 class="text-xl font-bold mb-3">Multi-Account Support</h3>
+                    <p class="text-gray-400">
+                        Manage multiple MT5 accounts from a single Telegram interface effortlessly.
+                    </p>
+                </div>
+
+                <!-- Feature 7 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">📈</div>
+                    <h3 class="text-xl font-bold mb-3">Advanced Analytics</h3>
+                    <p class="text-gray-400">
+                        Track your performance metrics and optimize your trading strategy with detailed stats.
+                    </p>
+                </div>
+
+                <!-- Feature 8 -->
+                <div class="glass p-8 text-center">
+                    <div class="feature-icon mx-auto mb-4">🛡️</div>
+                    <h3 class="text-xl font-bold mb-3">Bank-Grade Security</h3>
+                    <p class="text-gray-400">
+                        Military-grade encryption protects your account credentials and trading data.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 sm:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-6">Simple, Transparent Pricing</h2>
+                <p class="text-xl text-gray-400">Choose the plan that fits your copying strategy</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Monthly Pass -->
+                <div class="pricing-card glass p-8 lg:p-10 border border-gray-600">
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">Monthly Pass</h3>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold">$30</span>
+                        <span class="text-gray-400 ml-2">/month</span>
+                    </div>
+                    <p class="text-gray-400 mb-8">Perfect for traders who want flexibility and low commitment</p>
+                    <a href="#contact" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
+                        Choose Monthly
+                    </a>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Full Access</p>
+                                <p class="text-gray-400 text-sm">Complete EA functionality</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">3 Account Lock</p>
+                                <p class="text-gray-400 text-sm">Secure your MT5 accounts</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">24/7 Support</p>
+                                <p class="text-gray-400 text-sm">Email & Discord support</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">All Pairs Trading</p>
+                                <p class="text-gray-400 text-sm">Forex & Gold supported</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lifetime Access -->
+                <div class="pricing-card featured glass p-8 lg:p-10 border-2 border-lime-400">
+                    <div class="absolute top-0 right-6 transform -translate-y-1/2">
+                        <span class="bg-lime-400 text-black px-4 py-1 rounded-full text-sm font-bold">Most Popular</span>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-2 mt-4">Lifetime Access</h3>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold">$199</span>
+                        <span class="text-gray-400 ml-2">one-time</span>
+                    </div>
+                    <p class="text-gray-400 mb-8">Best value for serious traders - perfect for small community</p>
+                    <a href="#contact" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
+                        Get Lifetime Access
+                    </a>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Unlimited Updates</p>
+                                <p class="text-gray-400 text-sm">Forever free updates</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">10 Account Lock</p>
+                                <p class="text-gray-400 text-sm">Secure your MT5 account</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Premium VIP Group Access</p>
+                                <p class="text-gray-400 text-sm">Exclusive trading community</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Priority 24/7 Support</p>
+                                <p class="text-gray-400 text-sm">Dedicated support channel</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">All Pairs Trading</p>
+                                <p class="text-gray-400 text-sm">Forex & Gold supported</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseller/Coach Plan -->
+                <div class="pricing-card glass p-8 lg:p-10 border border-gray-600">
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">White Label Plan</h3>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold">$1499</span>
+                        <span class="text-gray-400 ml-2">one-time</span>
+                    </div>
+                    <p class="text-gray-400 mb-8">Perfect for coaches - help your students copy signals</p>
+                    <a href="#contact" class="btn-lime w-full py-4 rounded-lg text-lg font-bold text-center block mb-8">
+                        Get Reseller Access
+                    </a>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Unlimited Updates</p>
+                                <p class="text-gray-400 text-sm">Forever free updates</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Unlimited Account Locks</p>
+                                <p class="text-gray-400 text-sm">Support all your students</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Server Setup Assistance</p>
+                                <p class="text-gray-400 text-sm">Complete server configuration help</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Custom Branding</p>
+                                <p class="text-gray-400 text-sm">Brand the platform with your name</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">Priority 24/7 Support</p>
+                                <p class="text-gray-400 text-sm">Dedicated support channel</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-lime-400 mr-3 mt-1">✓</span>
+                            <div>
+                                <p class="font-semibold">All Pairs Trading</p>
+                                <p class="text-gray-400 text-sm">Forex & Gold supported</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-gray-400 mt-12">
+                All plans include a 7-day money-back guarantee. No questions asked.
+            </p>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 sm:py-32 bg-gradient-to-b from-transparent via-green-400/5 to-transparent">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-6">Frequently Asked Questions</h2>
+                <p class="text-xl text-gray-400">Everything you need to know about TTF+Funda Telegram Signal Copier</p>
+            </div>
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="faq-item glass p-6">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-bold">Is my MetaTrader 5 account secure?</h3>
+                        <span class="text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer pt-4 text-gray-400">
+                        <p>
+                            Yes, your account security is our top priority. We use:
+                        </p>
+                        <ul class="list-disc list-inside mt-3 space-y-2">
+                            <li>Military-grade AES-256 encryption for all credentials</li>
+                            <li>Remote license validation without storing sensitive data</li>
+                            <li>Account locking mechanism to prevent unauthorized access</li>
+                            <li>Zero direct access to your funds - we only execute trades you authorize</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="faq-item glass p-6">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-bold">How do I set up the Telegram Signal EA?</h3>
+                        <span class="text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer pt-4 text-gray-400">
+                        <p>
+                            Setup is incredibly simple and takes less than 2 minutes:
+                        </p>
+                        <ol class="list-decimal list-inside mt-3 space-y-2">
+                            <li>Purchase your plan and receive the bot link</li>
+                            <li>Connect Telegram channel & token to the bot</li>
+                            <li>Setup MetaTrader 5 account to connect to telegram signals</li>
+                            <li>Start receiving and executing signals automatically!</li>
+                        </ol>
+                        <p class="mt-4">We provide detailed step-by-step guides and video tutorials for all users.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="faq-item glass p-6">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-bold">What currency pairs and instruments are supported?</h3>
+                        <span class="text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer pt-4 text-gray-400">
+                        <p>
+                            We support all major forex pairs and gold trading:
+                        </p>
+                        <ul class="list-disc list-inside mt-3 space-y-2">
+                            <li>All EUR, GBP, USD, JPY, CHF, CAD, AUD, NZD pairs</li>
+                            <li>Gold (XAUUSD)</li>
+                            <li>Emerging market currencies</li>
+                            <li>Commodities (with broker support)</li>
+                        </ul>
+                        <p class="mt-4">As long as your broker offers it on MetaTrader 5, we can trade it.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="faq-item glass p-6">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-bold">Is there any risk if the EA stops working?</h3>
+                        <span class="text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer pt-4 text-gray-400">
+                        <p>
+                            You maintain full control at all times:
+                        </p>
+                        <ul class="list-disc list-inside mt-3 space-y-2">
+                            <li>You can disable the EA with one click</li>
+                            <li>All trades are executed only when you're connected to Telegram signals</li>
+                            <li>You can manually close any position at any time</li>
+                            <li>Our 24/7 support team monitors the system and alerts users of any issues</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="faq-item glass p-6">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-bold">Can I use the EA on multiple accounts?</h3>
+                        <span class="text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer pt-4 text-gray-400">
+                        <p>
+                            Basic plan includes 3 account lock. However:
+                        </p>
+                        <ul class="list-disc list-inside mt-3 space-y-2">
+                            <li>Add additional license account locks for $10/account/month</li>
+                            <li>Perfect for traders managing multiple strategies or accounts</li>
+                        </ul>
+                        <p class="mt-4">Contact our support team for custom multi-account pricing.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="faq-item glass p-6">
+                    <button class="faq-toggle w-full flex items-center justify-between text-left" onclick="toggleFAQ(this)">
+                        <h3 class="text-xl font-bold">What if I'm not satisfied with my purchase?</h3>
+                        <span class="text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer pt-4 text-gray-400">
+                        <p>
+                            We offer a hassle-free guarantee:
+                        </p>
+                        <ul class="list-disc list-inside mt-3 space-y-2">
+                            <li>7-day money-back guarantee for all plans</li>
+                            <li>No questions asked refund policy</li>
+                            <li>Monthly subscribers can cancel anytime</li>
+                        </ul>
+                        <p class="mt-4">We're confident you'll love Telegram Signal EA.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 sm:py-32 relative overflow-hidden">
+        <div class="absolute inset-0 glass"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl sm:text-5xl font-bold mb-6">Ready to Automate Your Trading?</h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Join hundreds of traders who are using TTF+Funda Telegram Signal Copier to copy trades automatically on MetaTrader 5.
+            </p>
+            <a href="#pricing" class="btn-lime px-8 py-4 rounded-lg text-lg font-bold inline-block">
+                Get Started Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-white font-bold mb-4">Product</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#features" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#pricing" class="hover:text-white transition">Pricing</a></li>
+                        <li><a href="#how-it-works" class="hover:text-white transition">How It Works</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Support</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Legal</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Connect</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Twitter</a></li>
+                        <li><a href="#" class="hover:text-white transition">Telegram Community</a></li>
+                        <li><a href="#" class="hover:text-white transition">Discord</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8">
+                <p class="text-gray-400 text-center">
+                    © 2025 TTF+Funda Telegram Signal Copier. All rights reserved.
+                </p>
+                <p class="text-gray-500 text-center text-sm mt-4">
+                    <strong>Disclaimer:</strong> Past performance is not indicative of future results. Trading forex and cryptocurrencies carries significant risk of loss. Ensure you understand the risks before trading.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Toggle Function
+        function toggleFAQ(button) {
+            const answer = button.nextElementSibling;
+            const toggle = button.querySelector('span');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (item !== button.closest('.faq-item')) {
+                    const otherAnswer = item.querySelector('.faq-answer');
+                    const otherToggle = item.querySelector('span');
+                    otherAnswer.classList.remove('open');
+                    otherToggle.textContent = '+';
+                }
+            });
+
+            // Toggle current FAQ
+            answer.classList.toggle('open');
+            toggle.textContent = answer.classList.contains('open') ? '−' : '+';
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#contact' && href !== '#') {
+                    e.preventDefault();
+                    const element = document.querySelector(href);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
